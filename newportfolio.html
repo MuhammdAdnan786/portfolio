@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AdnanAds — Facebook Ads Specialist</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#08090f;
+  --ink2:#0e1220;
+  --blue:#1877F2;
+  --gold:#F5C842;
+  --white:#f0f4ff;
+  --muted:#8492b0;
+  --card:#111827;
+  --border:rgba(255,255,255,0.07);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--white);overflow-x:hidden}
+
+/* CURSOR */
+.cursor{position:fixed;width:10px;height:10px;background:var(--blue);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+.cursor-ring{position:fixed;width:38px;height:38px;border:1.5px solid rgba(24,119,242,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .12s ease}
+
+/* BG */
+.bg-wrap{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg-blob1{position:absolute;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(24,119,242,0.12) 0%,transparent 70%);top:-200px;right:-100px}
+.bg-blob2{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(245,200,66,0.06) 0%,transparent 70%);bottom:-100px;left:-150px}
+.bg-lines{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(255,255,255,0.02) 79px,rgba(255,255,255,0.02) 80px),repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(255,255,255,0.02) 79px,rgba(255,255,255,0.02) 80px)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 6vw;background:rgba(8,9,15,0.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:11px;text-decoration:none}
+.logo-icon{width:40px;height:40px;border-radius:12px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;color:#fff;flex-shrink:0;box-shadow:0 0 20px rgba(24,119,242,0.4)}
+.logo-text{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:800;color:var(--white);letter-spacing:-0.5px}
+.logo-text span{color:var(--blue)}
+.nav-links{display:flex;gap:2.4rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.87rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--white)}
+.nav-wa{display:flex;align-items:center;gap:8px;background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.3);color:#25D366;text-decoration:none;padding:8px 20px;border-radius:100px;font-size:0.84rem;font-weight:600;transition:all .2s}
+.nav-wa:hover{background:rgba(37,211,102,0.2);transform:translateY(-1px)}
+
+/* HERO */
+#hero{position:relative;z-index:1;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:80px 0 0}
+.hero-left{padding:0 4vw 0 6vw;display:flex;flex-direction:column;justify-content:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;margin-bottom:28px;animation:fadeIn .8s ease both}
+.eyebrow-line{width:32px;height:2px;background:var(--blue);border-radius:2px}
+.eyebrow-text{font-size:0.78rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--blue)}
+.hero-name{font-family:'DM Sans',sans-serif;font-size:clamp(0.9rem,1.5vw,1.1rem);font-weight:400;color:var(--muted);margin-bottom:10px;animation:fadeIn .8s .1s ease both}
+h1.hero-title{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,5vw,5rem);font-weight:800;line-height:1.0;letter-spacing:-2px;margin-bottom:24px;animation:slideUp .8s .15s ease both}
+h1.hero-title .accent{color:var(--blue);display:block}
+h1.hero-title .gold{color:var(--gold)}
+.hero-desc{font-size:1rem;color:var(--muted);line-height:1.75;max-width:440px;margin-bottom:40px;font-weight:300;animation:slideUp .8s .25s ease both}
+.hero-cta{display:flex;flex-direction:column;gap:22px;animation:slideUp .8s .35s ease both}
+.cta-primary{display:inline-flex;align-items:center;gap:12px;background:var(--blue);color:#fff;text-decoration:none;padding:15px 32px;border-radius:14px;font-weight:600;font-size:1rem;width:fit-content;transition:all .25s;box-shadow:0 8px 30px rgba(24,119,242,0.3)}
+.cta-primary:hover{background:#155dcc;transform:translateY(-3px);box-shadow:0 16px 40px rgba(24,119,242,0.45)}
+.cta-primary svg{transition:transform .2s}
+.cta-primary:hover svg{transform:translateX(4px)}
+.social-row{display:flex;align-items:center;gap:8px}
+.social-label{font-size:0.74rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-right:6px;font-weight:500}
+.social-btn{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1.1rem;transition:all .2s;border:1px solid var(--border)}
+.s-wa{background:rgba(37,211,102,0.1);border-color:rgba(37,211,102,0.25);color:#25D366}
+.s-wa:hover{background:rgba(37,211,102,0.22);transform:translateY(-3px);box-shadow:0 8px 20px rgba(37,211,102,0.2)}
+.s-fb{background:rgba(24,119,242,0.1);border-color:rgba(24,119,242,0.25);color:#1877F2}
+.s-fb:hover{background:rgba(24,119,242,0.22);transform:translateY(-3px);box-shadow:0 8px 20px rgba(24,119,242,0.2)}
+.s-ig{background:rgba(225,48,108,0.1);border-color:rgba(225,48,108,0.25);color:#E1306C}
+.s-ig:hover{background:rgba(225,48,108,0.22);transform:translateY(-3px);box-shadow:0 8px 20px rgba(225,48,108,0.2)}
+.s-em{background:rgba(245,200,66,0.1);border-color:rgba(245,200,66,0.25);color:var(--gold)}
+.s-em:hover{background:rgba(245,200,66,0.22);transform:translateY(-3px);box-shadow:0 8px 20px rgba(245,200,66,0.2)}
+
+/* HERO RIGHT */
+.hero-right{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ring-dec{position:absolute;width:480px;height:480px;border-radius:50%;border:1px dashed rgba(24,119,242,0.15);top:50%;left:50%;transform:translate(-50%,-50%);animation:spinSlow 30s linear infinite;z-index:1}
+.ring-dec2{position:absolute;width:570px;height:570px;border-radius:50%;border:1px dashed rgba(245,200,66,0.08);top:50%;left:50%;transform:translate(-50%,-50%);animation:spinSlow 50s linear infinite reverse;z-index:1}
+.ring-dec::after{content:'';position:absolute;width:8px;height:8px;background:var(--blue);border-radius:50%;top:0;left:50%;transform:translateX(-50%);box-shadow:0 0 14px var(--blue)}
+.hero-img-frame{position:relative;z-index:2;animation:imgReveal .9s .3s ease both}
+.img-outer{position:relative;width:320px;height:400px}
+.img-outer::before{content:'';position:absolute;top:-12px;left:-12px;width:55px;height:55px;border-top:3px solid var(--blue);border-left:3px solid var(--blue);border-radius:4px 0 0 0;z-index:3}
+.img-outer::after{content:'';position:absolute;bottom:-12px;right:-12px;width:55px;height:55px;border-bottom:3px solid var(--gold);border-right:3px solid var(--gold);border-radius:0 0 4px 0;z-index:3}
+.img-inner{width:100%;height:100%;border-radius:22px;overflow:hidden;background:linear-gradient(145deg,#111827,#1a2540)}
+.badge-float{position:absolute;z-index:4;background:rgba(14,18,32,0.95);border:1px solid var(--border);border-radius:14px;padding:11px 15px;backdrop-filter:blur(10px);display:flex;align-items:center;gap:10px;animation:floatBadge 3.5s ease-in-out infinite}
+.badge-float.b1{top:24px;right:-54px;animation-delay:0s}
+.badge-float.b2{bottom:50px;left:-54px;animation-delay:1.8s}
+.b-icon{font-size:1.2rem}
+.b-text strong{display:block;color:var(--white);font-size:0.85rem;font-weight:600;line-height:1.2}
+.b-text span{color:var(--muted);font-size:0.7rem}
+.hero-vertical{position:absolute;right:18px;top:50%;transform:translateY(-50%) rotate(90deg);font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.12);font-weight:600;white-space:nowrap}
+
+@keyframes floatBadge{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes spinSlow{from{transform:translate(-50%,-50%) rotate(0)}to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes imgReveal{from{opacity:0;transform:scale(0.93) translateY(20px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+
+/* STATS STRIP */
+.stats-strip{position:relative;z-index:1;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:rgba(14,18,32,0.7);backdrop-filter:blur(10px)}
+.stats-inner{display:flex;max-width:1200px;margin:0 auto}
+.stat-item{flex:1;padding:26px 20px;text-align:center;border-right:1px solid var(--border);transition:background .2s}
+.stat-item:last-child{border-right:none}
+.stat-item:hover{background:rgba(24,119,242,0.05)}
+.stat-val{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--white);line-height:1;letter-spacing:-1px}
+.s-accent{color:var(--blue)}
+.g-accent{color:var(--gold)}
+.stat-key{font-size:0.72rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:5px}
+
+/* SECTION COMMON */
+.section{position:relative;z-index:1;padding:96px 6vw}
+.sec-tag{display:inline-flex;align-items:center;gap:8px;font-size:0.74rem;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
+.sec-tag::before{content:'';width:20px;height:1.5px;background:var(--blue);border-radius:2px}
+.sec-title{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3.4rem);font-weight:800;letter-spacing:-1.5px;line-height:1.05}
+.sec-title em{color:var(--blue);font-style:normal}
+.sec-sub{color:var(--muted);font-size:0.95rem;line-height:1.75;max-width:520px;margin-top:14px;font-weight:300}
+.sec-header{margin-bottom:56px}
+
+/* SERVICES */
+#services{background:rgba(14,18,32,0.5)}
+.srv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--border);border-radius:20px;overflow:hidden;max-width:1200px;margin:0 auto}
+.srv-item{background:var(--card);padding:30px 24px;transition:all .25s;cursor:default;position:relative;overflow:hidden}
+.srv-item::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(24,119,242,0.07),transparent);opacity:0;transition:opacity .25s}
+.srv-item:hover{background:#151e30}
+.srv-item:hover::after{opacity:1}
+.srv-item:hover .srv-icon{background:var(--blue);border-color:var(--blue)}
+.srv-icon{width:48px;height:48px;border-radius:13px;background:rgba(24,119,242,0.1);border:1px solid rgba(24,119,242,0.2);display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:18px;transition:all .25s}
+.srv-item h3{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:9px;line-height:1.3}
+.srv-item p{font-size:0.8rem;color:var(--muted);line-height:1.6}
+
+/* PORTFOLIO */
+.port-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1200px;margin:0 auto}
+.port-card{border-radius:20px;overflow:hidden;background:var(--card);border:1px solid var(--border);transition:all .3s}
+.port-card:hover{transform:translateY(-6px);border-color:rgba(24,119,242,0.35);box-shadow:0 24px 60px rgba(0,0,0,0.4)}
+.port-visual{height:180px;display:flex;align-items:center;justify-content:center;font-size:3.2rem;position:relative}
+.pv1{background:linear-gradient(135deg,#0c1a3a,#1a3a7a)}
+.pv2{background:linear-gradient(135deg,#0a2a2a,#0e6060)}
+.pv3{background:linear-gradient(135deg,#2a1a00,#7a4e00)}
+.pv4{background:linear-gradient(135deg,#1a0a2a,#5a1a7a)}
+.pv5{background:linear-gradient(135deg,#0a2a1a,#0e6040)}
+.pv6{background:linear-gradient(135deg,#2a0a0a,#7a1a1a)}
+.port-pill{position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.55);backdrop-filter:blur(8px);padding:4px 13px;border-radius:100px;font-size:0.68rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.85)}
+.port-body{padding:20px 22px}
+.port-body h3{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:7px}
+.port-body p{font-size:0.79rem;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.port-stats{display:flex;gap:18px}
+.ps-v{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--blue)}
+.ps-k{font-size:0.63rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-top:2px}
+
+/* TESTIMONIALS */
+#testimonials{background:rgba(14,18,32,0.5)}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1200px;margin:0 auto}
+.tc{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;position:relative;transition:all .3s}
+.tc:hover{transform:translateY(-4px);border-color:rgba(245,200,66,0.22);box-shadow:0 20px 50px rgba(0,0,0,0.35)}
+.tc-quote{font-family:'Playfair Display',serif;font-size:4rem;color:rgba(24,119,242,0.12);line-height:1;position:absolute;top:14px;right:18px;font-style:italic}
+.tc-stars{color:var(--gold);font-size:0.88rem;letter-spacing:2px;margin-bottom:12px}
+.tc-text{font-size:0.86rem;color:var(--muted);line-height:1.7;margin-bottom:20px;font-weight:300}
+.tc-author{display:flex;align-items:center;gap:12px}
+.tc-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;color:#fff;flex-shrink:0}
+.a1{background:linear-gradient(135deg,#1877F2,#00bfff)}
+.a2{background:linear-gradient(135deg,#8B5CF6,#ec4899)}
+.a3{background:linear-gradient(135deg,#F5A623,#ef4444)}
+.a4{background:linear-gradient(135deg,#22c55e,#14b8a6)}
+.a5{background:linear-gradient(135deg,#f97316,#eab308)}
+.a6{background:linear-gradient(135deg,#ec4899,#8B5CF6)}
+.tc-name{font-size:0.88rem;font-weight:600;color:var(--white)}
+.tc-role{font-size:0.72rem;color:var(--muted)}
+
+/* PROCESS */
+.process-wrap{max-width:1000px;margin:0 auto;position:relative}
+.process-line{position:absolute;top:35px;left:calc(10% + 18px);right:calc(10% + 18px);height:2px;background:linear-gradient(90deg,var(--blue),var(--gold));opacity:0.2;border-radius:2px}
+.process-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;z-index:1}
+.proc{text-align:center;padding:0 14px}
+.proc-num{width:70px;height:70px;border-radius:50%;border:2px solid var(--blue);background:var(--ink);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--blue);position:relative;transition:all .3s}
+.proc-num::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px dashed rgba(24,119,242,0.22)}
+.proc:hover .proc-num{background:var(--blue);color:#fff;box-shadow:0 0 28px rgba(24,119,242,0.4)}
+.proc h4{font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700;margin-bottom:7px}
+.proc p{font-size:0.74rem;color:var(--muted);line-height:1.55}
+
+/* PRICING */
+#pricing{background:rgba(14,18,32,0.5)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1100px;margin:0 auto}
+.pc{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:34px 28px;position:relative;overflow:hidden;transition:all .3s}
+.pc.featured{background:linear-gradient(160deg,#0e1a38,#0c2060);border-color:rgba(24,119,242,0.5)}
+.pc:not(.featured):hover{transform:translateY(-4px);border-color:rgba(24,119,242,0.3)}
+.pc-pop{position:absolute;top:18px;right:-30px;background:var(--blue);color:#fff;font-size:0.6rem;font-weight:700;letter-spacing:1.5px;padding:5px 48px;transform:rotate(45deg);text-transform:uppercase}
+.pc-plan{font-size:0.7rem;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.pc-price{font-family:'Syne',sans-serif;font-size:3.2rem;font-weight:800;line-height:1;letter-spacing:-2px;margin-bottom:4px}
+.pc-price sup{font-size:1.3rem;vertical-align:super;letter-spacing:0}
+.pc-cycle{font-size:0.76rem;color:var(--muted);margin-bottom:24px}
+.pc-feats{list-style:none;margin-bottom:28px}
+.pc-feats li{font-size:0.83rem;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;gap:9px;color:var(--muted)}
+.ck{color:var(--blue);font-weight:700;font-size:0.8rem}
+.pc-feats li.no{opacity:.3}
+.pc-feats li.no .ck{color:var(--muted)}
+.pc-wa{display:flex;align-items:center;justify-content:center;gap:9px;background:var(--blue);color:#fff;text-decoration:none;padding:13px;border-radius:12px;font-weight:600;font-size:0.88rem;transition:all .2s;border:none;cursor:pointer;width:100%}
+.pc-wa:hover{background:#155dcc;transform:translateY(-2px);box-shadow:0 10px 28px rgba(24,119,242,0.4)}
+.pc-wa.outline{background:transparent;border:1.5px solid rgba(24,119,242,0.4);color:var(--blue)}
+.pc-wa.outline:hover{background:rgba(24,119,242,0.1)}
+
+/* CONTACT — NO FORM */
+#contact{position:relative;z-index:1;padding:96px 6vw}
+.contact-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:66px;align-items:center;max-width:1100px;margin:0 auto}
+.contact-left h2{font-family:'Syne',sans-serif;font-size:clamp(2.2rem,4vw,3.6rem);font-weight:800;line-height:1;letter-spacing:-2px;margin-bottom:16px}
+.contact-left h2 em{color:var(--blue);font-style:normal;display:block}
+.contact-left p{font-size:0.95rem;color:var(--muted);line-height:1.75;margin-bottom:38px;font-weight:300;max-width:430px}
+.contact-cards{display:flex;flex-direction:column;gap:12px}
+.cc{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:15px;padding:16px 20px;text-decoration:none;transition:all .25s;position:relative;overflow:hidden}
+.cc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;transition:opacity .25s;opacity:0}
+.cc:hover::before{opacity:1}
+.cc-wa::before{background:#25D366}
+.cc-em::before{background:var(--gold)}
+.cc-ig::before{background:linear-gradient(#E1306C,#833AB4)}
+.cc-fb::before{background:#1877F2}
+.cc:hover{transform:translateX(5px);border-color:rgba(255,255,255,0.1)}
+.cc-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.i-wa{background:rgba(37,211,102,0.12);border:1px solid rgba(37,211,102,0.2)}
+.i-em{background:rgba(245,200,66,0.12);border:1px solid rgba(245,200,66,0.2)}
+.i-ig{background:rgba(225,48,108,0.12);border:1px solid rgba(225,48,108,0.2)}
+.i-fb{background:rgba(24,119,242,0.12);border:1px solid rgba(24,119,242,0.2)}
+.cc-label{font-size:0.68rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:500;margin-bottom:2px}
+.cc-val{font-size:0.92rem;font-weight:600;color:var(--white);transition:color .2s}
+.cc:hover .cc-val{color:var(--blue)}
+.cc-arrow{margin-left:auto;color:var(--muted);transition:all .2s;font-size:1rem}
+.cc:hover .cc-arrow{color:var(--blue);transform:translateX(3px)}
+/* Availability card */
+.avail-card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:36px 32px;text-align:center;position:relative;overflow:hidden}
+.avail-card::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:200px;height:200px;background:radial-gradient(circle,rgba(24,119,242,0.1),transparent 70%)}
+.avail-dot{width:11px;height:11px;border-radius:50%;background:#22c55e;margin:0 auto 16px;box-shadow:0 0 0 4px rgba(34,197,94,0.2);animation:avPulse 2s infinite}
+@keyframes avPulse{0%,100%{box-shadow:0 0 0 4px rgba(34,197,94,0.2)}50%{box-shadow:0 0 0 10px rgba(34,197,94,0.06)}}
+.avail-card h3{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:9px;letter-spacing:-0.5px}
+.avail-card p{font-size:0.85rem;color:var(--muted);line-height:1.65;margin-bottom:26px}
+.avail-stat{display:flex;justify-content:center;gap:28px;margin-bottom:26px;padding:18px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.av-n{font-family:'Syne',sans-serif;font-size:1.7rem;font-weight:800;color:var(--white);line-height:1}
+.av-l{font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px}
+.avail-wa{display:flex;align-items:center;justify-content:center;gap:9px;background:#25D366;color:#fff;text-decoration:none;padding:13px 24px;border-radius:12px;font-weight:600;font-size:0.92rem;transition:all .2s}
+.avail-wa:hover{background:#1ea854;transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,211,102,0.3)}
+
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:38px 6vw;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;background:rgba(8,9,15,0.9)}
+.foot-logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.foot-logo-icon{width:32px;height:32px;border-radius:9px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:800;color:#fff}
+.foot-logo-text{font-family:'Syne',sans-serif;font-size:0.98rem;font-weight:800;color:var(--white)}
+.foot-logo-text span{color:var(--blue)}
+.foot-center{font-size:0.78rem;color:var(--muted);text-align:center}
+.foot-social{display:flex;gap:9px}
+.f-s{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;text-decoration:none;border:1px solid var(--border);color:var(--muted);transition:all .2s}
+.f-s:hover{border-color:rgba(24,119,242,0.4);background:rgba(24,119,242,0.1);color:var(--white);transform:translateY(-2px)}
+
+/* FLOATING WA */
+.float-wa{position:fixed;bottom:26px;right:26px;z-index:600;width:54px;height:54px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 8px 28px rgba(37,211,102,0.45);animation:popIn .5s 1s ease both;transition:transform .2s}
+.float-wa:hover{transform:scale(1.12)}
+.float-wa-ring{position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(37,211,102,0.35);animation:ringPop 2.2s 1.5s ease infinite}
+@keyframes popIn{from{opacity:0;transform:scale(0)}to{opacity:1;transform:scale(1)}}
+@keyframes ringPop{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.5);opacity:0}}
+
+/* SCROLL REVEAL */
+.sr{opacity:0;transform:translateY(26px);transition:opacity .65s ease,transform .65s ease}
+.sr.visible{opacity:1;transform:none}
+.sr-left{opacity:0;transform:translateX(-26px);transition:opacity .65s ease,transform .65s ease}
+.sr-left.visible{opacity:1;transform:none}
+.sr-right{opacity:0;transform:translateX(26px);transition:opacity .65s ease,transform .65s ease}
+.sr-right.visible{opacity:1;transform:none}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  #hero{grid-template-columns:1fr;padding:100px 6vw 50px}
+  .hero-right{height:360px;margin-top:20px}
+  .nav-links{display:none}
+  .stats-inner{flex-wrap:wrap}
+  .stat-item{min-width:50%}
+  .srv-grid{grid-template-columns:repeat(2,1fr)}
+  .port-grid,.testi-grid,.pricing-grid{grid-template-columns:1fr}
+  .process-grid{grid-template-columns:repeat(2,1fr);gap:28px}
+  .process-line{display:none}
+  .contact-grid{grid-template-columns:1fr;gap:40px}
+}
+@media(max-width:560px){
+  .srv-grid{grid-template-columns:1fr}
+  .stats-inner{flex-direction:column}
+  .stat-item{border-right:none;border-bottom:1px solid var(--border)}
+  .badge-float.b1{right:-20px}
+  .badge-float.b2{left:-20px}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<div class="bg-wrap">
+  <div class="bg-blob1"></div>
+  <div class="bg-blob2"></div>
+  <div class="bg-lines"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon"><img src="portfolio-logo.jpeg" width="50px" height="50px" alt=""></div>
+    <div class="logo-text">Adnan<span>Ads</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Work</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <!-- <li><a href="#pricing">Pricing</a></li> -->
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://wa.me/923350198494" class="nav-wa" target="_blank">
+    <svg width="15" height="15" viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.67 4.61 1.832 6.5L4 29l7.78-1.805A11.94 11.94 0 0016 27c6.627 0 12-5.373 12-12S22.627 3 16 3z"/></svg>
+    WhatsApp
+  </a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-line"></div>
+      <span class="eyebrow-text">Facebook Ads Specialist</span>
+    </div>
+    <div class="hero-name">Hi, I'm Adnan — Your Growth Partner</div>
+    <h1 class="hero-title">
+      Turn <span class="gold">Clicks</span> Into
+      <span class="accent">Real Clients.</span>
+    </h1>
+    <p class="hero-desc">I help coaches, consultants &amp; personal brands scale through high-converting Facebook Ads — built on data, storytelling, and proven strategy.</p>
+    <div class="hero-cta">
+      <a href="https://wa.me/923350198494" class="cta-primary" target="_blank">
+        Let's Work Together
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <div class="social-row">
+        <span class="social-label">Find me on</span>
+        <a href="https://wa.me/923350198494" class="social-btn s-wa" target="_blank" title="WhatsApp">
+          <svg width="18" height="18" viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.67 4.61 1.832 6.5L4 29l7.78-1.805A11.94 11.94 0 0016 27c6.627 0 12-5.373 12-12S22.627 3 16 3zm6.2 16.8c-.26.73-1.52 1.38-2.1 1.44-.54.06-1.04.26-3.5-.73-2.96-1.18-4.86-4.18-5.01-4.37-.14-.2-1.16-1.54-1.16-2.93 0-1.4.73-2.09 1-2.37.26-.27.57-.34.77-.34.19 0 .38.01.54.01.17 0 .4-.07.63.48.23.56.78 1.92.85 2.06.07.14.12.3.02.48-.1.18-.15.3-.3.46-.14.16-.3.36-.43.48-.14.14-.29.29-.12.57.17.28.74 1.22 1.59 1.97 1.09.97 2.01 1.27 2.3 1.41.28.14.45.12.62-.07.17-.2.72-.84.91-1.12.19-.28.38-.23.64-.14.26.09 1.65.78 1.93.92.28.14.47.21.54.33.07.12.07.69-.19 1.39z"/></svg>
+        </a>
+        <a href="https://web.facebook.com/profile.php?id=61588491668048" class="social-btn s-fb" target="_blank" title="Facebook">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/muhammad442169" class="social-btn s-ig" target="_blank" title="Instagram">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="adnan.codepro@gmail.com" class="social-btn s-em" title="Email">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT IMAGE SIDE -->
+  <div class="hero-right">
+    <div class="ring-dec"></div>
+    <div class="ring-dec2"></div>
+    <div class="hero-img-frame">
+      <div class="img-outer">
+        <div class="badge-float b1">
+          <span class="b-icon">📈</span>
+          <div class="b-text"><strong>4.8x ROAS</strong><span>Average Return</span></div>
+        </div>
+        <div class="badge-float b2">
+          <span class="b-icon">⭐</span>
+          <div class="b-text"><strong>5.0 Rating</strong><span>98+ Clients</span></div>
+        </div>
+        <img src="adnan.png" class="img-inner alt="">
+        <!-- <div class="img-inner">
+          <svg viewBox="0 0 320 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="bgG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#111827"/><stop offset="100%" stop-color="#1c2a44"/></linearGradient>
+              <linearGradient id="suitG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a2b4a"/><stop offset="100%" stop-color="#0d1a2e"/></linearGradient>
+              <linearGradient id="skinG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8956c"/><stop offset="100%" stop-color="#ae7850"/></linearGradient>
+              <radialGradient id="glow" cx="50%" cy="25%" r="50%"><stop offset="0%" stop-color="rgba(24,119,242,0.18)"/><stop offset="100%" stop-color="transparent"/></radialGradient>
+            </defs>
+            <rect width="320" height="400" fill="url(#bgG)"/>
+            <ellipse cx="160" cy="110" rx="150" ry="130" fill="url(#glow)"/>
+            <!-- Grid lines -->
+            <g stroke="rgba(255,255,255,0.025)" stroke-width="1">
+              <line x1="0" y1="80" x2="320" y2="80"/><line x1="0" y1="160" x2="320" y2="160"/>
+              <line x1="0" y1="240" x2="320" y2="240"/><line x1="0" y1="320" x2="320" y2="320"/>
+              <line x1="80" y1="0" x2="80" y2="400"/><line x1="160" y1="0" x2="160" y2="400"/>
+              <line x1="240" y1="0" x2="240" y2="400"/>
+            </g>
+            <!-- Bottom glow floor -->
+            <ellipse cx="160" cy="420" rx="190" ry="80" fill="rgba(24,119,242,0.1)"/>
+            <!-- Suit body -->
+            <path d="M50 400 L50 275 Q50 248 78 234 L128 216 L160 248 L192 216 L242 234 Q270 248 270 275 L270 400 Z" fill="url(#suitG)"/>
+            <!-- Shirt -->
+            <path d="M136 220 L160 244 L184 220 L177 214 L160 234 L143 214 Z" fill="#1a3060"/>
+            <!-- Tie -->
+            <path d="M155 238 L160 295 L165 238 L162 232 L160 240 L158 232 Z" fill="#1877F2"/>
+            <!-- Lapels -->
+            <path d="M128 216 L153 232 L143 214 Z" fill="#223558"/>
+            <path d="M192 216 L167 232 L177 214 Z" fill="#223558"/>
+            <!-- Collar -->
+            <path d="M143 212 L160 222 L177 212 L174 206 L160 217 L146 206 Z" fill="#dde8f8"/>
+            <!-- Neck -->
+            <rect x="148" y="183" width="24" height="32" rx="12" fill="url(#skinG)"/>
+            <!-- Head -->
+            <ellipse cx="160" cy="158" rx="54" ry="62" fill="url(#skinG)"/>
+            <!-- Hair -->
+            <path d="M106 148 Q106 92 160 88 Q214 92 214 148 Q214 120 205 108 Q188 90 160 90 Q132 90 115 108 Q106 120 106 148 Z" fill="#1a0c04"/>
+            <!-- Subtle beard -->
+            <ellipse cx="160" cy="198" rx="30" ry="12" fill="rgba(80,40,15,0.2)"/>
+            <!-- Eyes -->
+            <ellipse cx="140" cy="157" rx="7.5" ry="8.5" fill="#fff"/>
+            <ellipse cx="180" cy="157" rx="7.5" ry="8.5" fill="#fff"/>
+            <circle cx="141.5" cy="158" r="5" fill="#2e1808"/>
+            <circle cx="181.5" cy="158" r="5" fill="#2e1808"/>
+            <circle cx="143" cy="156" r="1.5" fill="#fff"/>
+            <circle cx="183" cy="156" r="1.5" fill="#fff"/>
+            <!-- Eyebrows -->
+            <path d="M130 147 Q140 142 150 146" stroke="#200e02" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M170 146 Q180 142 190 147" stroke="#200e02" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <!-- Nose -->
+            <path d="M156 167 Q152 180 148 184 Q155 188 160 187 Q165 188 172 184 Q168 180 164 167 Z" fill="rgba(130,70,30,0.3)"/>
+            <!-- Smile -->
+            <path d="M146 199 Q160 210 174 199" stroke="rgba(110,55,20,0.55)" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <!-- Ears -->
+            <ellipse cx="106" cy="161" rx="9" ry="13" fill="url(#skinG)"/>
+            <ellipse cx="214" cy="161" rx="9" ry="13" fill="url(#skinG)"/>
+            <!-- Laptop/desk suggestion -->
+            <rect x="80" y="320" width="160" height="6" rx="3" fill="rgba(24,119,242,0.15)"/>
+            <rect x="86" y="300" width="148" height="26" rx="5" fill="rgba(10,20,50,0.6)"/>
+            <rect x="92" y="306" width="136" height="8" rx="4" fill="rgba(24,119,242,0.35)"/>
+            <rect x="92" y="317" width="90" height="4" rx="2" fill="rgba(255,255,255,0.08)"/>
+            <!-- Decorative fb letter -->
+            <text x="284" y="34" font-family="Georgia,serif" font-size="20" fill="rgba(24,119,242,0.14)" font-weight="bold">f</text>
+            <!-- Corner dots -->
+            <circle cx="22" cy="22" r="3" fill="rgba(24,119,242,0.3)"/>
+            <circle cx="298" cy="378" r="3" fill="rgba(245,200,66,0.3)"/>
+          </svg>
+        </div> -->
+      </div>
+    </div>
+    <div class="hero-vertical">Facebook Ads · Personal Brand Growth · Results</div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat-item sr"><div class="stat-val"><span class="s-accent" data-count="150">0</span>+</div><div class="stat-key">Campaigns</div></div>
+    <div class="stat-item sr"><div class="stat-val"><span class="s-accent" data-count="98">0</span>+</div><div class="stat-key">Happy Clients</div></div>
+    <div class="stat-item sr"><div class="stat-val"><span class="g-accent">4.8</span>x</div><div class="stat-key">Avg ROAS</div></div>
+    <div class="stat-item sr"><div class="stat-val"><span class="s-accent" data-count="94">0</span>%</div><div class="stat-key">Client Retention</div></div>
+    <div class="stat-item sr"><div class="stat-val">⭐ <span class="g-accent">5.0</span></div><div class="stat-key">Rating</div></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services" class="section">
+  <div class="sec-header sr"><div class="sec-tag">What I Offer</div><h2 class="sec-title">Complete Facebook Ads<br><em>Management</em></h2><p class="sec-sub">Everything you need to build authority, generate leads, and scale your personal brand.</p></div>
+  <div class="srv-grid">
+    <div class="srv-item sr"><div class="srv-icon">🚀</div><h3>Campaign Setup & Launch</h3><p>Complete setup with pixel, campaign structure, and creatives optimized from day one.</p></div>
+    <div class="srv-item sr"><div class="srv-icon">🎯</div><h3>Audience Research</h3><p>Deep targeting using interest stacking, lookalikes, and behavioral data.</p></div>
+    <div class="srv-item sr"><div class="srv-icon">📣</div><h3>Brand Awareness</h3><p>Strategic campaigns that build authority and keep your brand top-of-mind at scale.</p></div>
+    <div class="srv-item sr"><div class="srv-icon">🧲</div><h3>Lead Generation</h3><p>High-converting ads that fill your pipeline with qualified, ready-to-buy prospects daily.</p></div>
+    <div class="srv-item sr"><div class="srv-icon">🔄</div><h3>Retargeting Strategy</h3><p>Advanced sequences that re-engage warm audiences and turn visitors into paying clients.</p></div>
+    <div class="srv-item sr"><div class="srv-icon">📈</div><h3>Campaign Optimization</h3><p>Ongoing A/B testing, bid adjustments, and creative refresh for maximum ROAS.</p></div>
+    <div class="srv-item sr"><div class="srv-icon">✍️</div><h3>Ad Copywriting</h3><p>Scroll-stopping copy built around storytelling and your brand voice.</p></div>
+    <div class="srv-item sr"><div class="srv-icon">📊</div><h3>Analytics & Reports</h3><p>Weekly performance reports with clear KPIs and actionable insights.</p></div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="section" style="background:rgba(14,18,32,0.5)">
+  <div class="sec-header sr"><div class="sec-tag">Previous Work</div><h2 class="sec-title">Campaigns That<br><em>Delivered</em></h2><p class="sec-sub">Real campaigns, real results — a selection of my highest-performing work.</p></div>
+  <div class="port-grid">
+    <div class="port-card sr"><div class="port-visual pv1">🏋️<div class="port-pill">Fitness Coach</div></div><div class="port-body"><h3>Online Fitness Coach — Lead Gen</h3><p>60-day lead campaign using video ads and a quiz funnel targeting health-conscious women 25–40.</p><div class="port-stats"><div><div class="ps-v">340</div><div class="ps-k">Leads</div></div><div><div class="ps-v">$4.20</div><div class="ps-k">CPL</div></div><div><div class="ps-v">6.2x</div><div class="ps-k">ROAS</div></div></div></div></div>
+    <div class="port-card sr"><div class="port-visual pv2">💼<div class="port-pill">Business Coach</div></div><div class="port-body"><h3>Business Coach — Webinar Funnel</h3><p>Promoted a free webinar series using retargeting and lookalike audiences.</p><div class="port-stats"><div><div class="ps-v">820</div><div class="ps-k">Signups</div></div><div><div class="ps-v">$2.80</div><div class="ps-k">CPR</div></div><div><div class="ps-v">5.1x</div><div class="ps-k">ROAS</div></div></div></div></div>
+    <div class="port-card sr"><div class="port-visual pv3">📚<div class="port-pill">Online Course</div></div><div class="port-body"><h3>E-Learning Brand — Course Sales</h3><p>Scaled an online course from $3k to $18k/month using full-funnel strategy.</p><div class="port-stats"><div><div class="ps-v">6x</div><div class="ps-k">Revenue</div></div><div><div class="ps-v">$11.50</div><div class="ps-k">CPA</div></div><div><div class="ps-v">7.8x</div><div class="ps-k">ROAS</div></div></div></div></div>
+    <div class="port-card sr"><div class="port-visual pv4">🧘<div class="port-pill">Life Coach</div></div><div class="port-body"><h3>Life Coach — Brand Awareness</h3><p>Reached 250K+ targeted prospects in 45 days through storytelling video ads.</p><div class="port-stats"><div><div class="ps-v">250K</div><div class="ps-k">Reach</div></div><div><div class="ps-v">4.1%</div><div class="ps-k">CTR</div></div><div><div class="ps-v">180</div><div class="ps-k">DMs</div></div></div></div></div>
+    <div class="port-card sr"><div class="port-visual pv5">🏠<div class="port-pill">Real Estate</div></div><div class="port-body"><h3>Real Estate Consultant — Leads</h3><p>Generated 195 exclusive buyer/seller leads monthly using geo-targeted Lead Ads.</p><div class="port-stats"><div><div class="ps-v">195</div><div class="ps-k">Leads/mo</div></div><div><div class="ps-v">$6.10</div><div class="ps-k">CPL</div></div><div><div class="ps-v">4.5x</div><div class="ps-k">ROAS</div></div></div></div></div>
+    <div class="port-card sr"><div class="port-visual pv6">💰<div class="port-pill">Finance Coach</div></div><div class="port-body"><h3>Finance Coach — Consultation Bookings</h3><p>Drove 120 discovery call bookings/month through authority-positioning ads.</p><div class="port-stats"><div><div class="ps-v">120</div><div class="ps-k">Bookings/mo</div></div><div><div class="ps-v">$8.30</div><div class="ps-k">CPB</div></div><div><div class="ps-v">5.6x</div><div class="ps-k">ROAS</div></div></div></div></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials" class="section">
+  <div class="sec-header sr"><div class="sec-tag">Client Reviews</div><h2 class="sec-title">What My <em>Clients</em> Say</h2><p class="sec-sub">Real feedback from real clients who trusted me with their growth.</p></div>
+  <div class="testi-grid">
+    <div class="tc sr"><div class="tc-quote">"</div><div class="tc-stars">★★★★★</div><p class="tc-text">Within the first month, my leads tripled and quality was far better than anything I had seen. Truly a Facebook Ads wizard.</p><div class="tc-author"><div class="tc-av a1">SA</div><div><div class="tc-name">Sarah Ahmed</div><div class="tc-role">Fitness Coach, Dubai</div></div></div></div>
+    <div class="tc sr"><div class="tc-quote">"</div><div class="tc-stars">★★★★★</div><p class="tc-text">I now have a consistent pipeline of 40+ consultation calls booked every single month. The best investment I've made!</p><div class="tc-author"><div class="tc-av a2">MK</div><div><div class="tc-name">Michael Khan</div><div class="tc-role">Business Coach, UK</div></div></div></div>
+    <div class="tc sr"><div class="tc-quote">"</div><div class="tc-stars">★★★★★</div><p class="tc-text">My course revenue went from $3,000 to $18,000 per month in just 3 months. Targeting and creatives were spot on!</p><div class="tc-author"><div class="tc-av a3">RJ</div><div><div class="tc-name">Rania Javed</div><div class="tc-role">Course Creator, Canada</div></div></div></div>
+    <div class="tc sr"><div class="tc-quote">"</div><div class="tc-stars">★★★★★</div><p class="tc-text">The retargeting strategy alone recovered 35% of people who visited but didn't convert. Exceptional, professional work.</p><div class="tc-author"><div class="tc-av a4">DL</div><div><div class="tc-name">David Lee</div><div class="tc-role">Life Coach, Australia</div></div></div></div>
+    <div class="tc sr"><div class="tc-quote">"</div><div class="tc-stars">★★★★★</div><p class="tc-text">Lead quality is phenomenal — actual buyers and sellers, not random clicks. Worth every single rupee invested!</p><div class="tc-author"><div class="tc-av a5">FA</div><div><div class="tc-name">Farhan Ali</div><div class="tc-role">Real Estate, Karachi</div></div></div></div>
+    <div class="tc sr"><div class="tc-quote">"</div><div class="tc-stars">★★★★★</div><p class="tc-text">My brand awareness campaign reached 250K people in 6 weeks. Clear communication, transparent reporting, next-level expertise.</p><div class="tc-author"><div class="tc-av a6">NR</div><div><div class="tc-name">Nadia Rahman</div><div class="tc-role">Finance Coach, Lahore</div></div></div></div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="section" style="background:rgba(14,18,32,0.5)">
+  <div style="text-align:center">
+    <div class="sec-tag sr" style="justify-content:center">My Process</div>
+    <h2 class="sec-title sr" style="text-align:center">How We <em>Work</em> Together</h2>
+    <p class="sec-sub sr" style="margin:14px auto 60px;text-align:center">A clear, 5-step journey from strategy to scaling your business.</p>
+  </div>
+  <div class="process-wrap">
+    <div class="process-line"></div>
+    <div class="process-grid">
+      <div class="proc sr"><div class="proc-num">1</div><h4>Discovery Call</h4><p>Discuss goals, audience, budget & business model.</p></div>
+      <div class="proc sr"><div class="proc-num">2</div><h4>Strategy</h4><p>Deep research, competitor analysis, campaign blueprint.</p></div>
+      <div class="proc sr"><div class="proc-num">3</div><h4>Creative Build</h4><p>Ad copy, visuals, pixel — built for conversions.</p></div>
+      <div class="proc sr"><div class="proc-num">4</div><h4>Launch & Monitor</h4><p>Daily monitoring and early optimization after launch.</p></div>
+      <div class="proc sr"><div class="proc-num">5</div><h4>Scale & Grow</h4><p>Winners scaled, losers replaced — continuous growth.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING
+<section id="pricing" class="section">
+  <div class="sec-header sr"><div class="sec-tag">Investment</div><h2 class="sec-title">Transparent <em>Pricing</em></h2><p class="sec-sub">Custom packages available — always message me on WhatsApp first.</p></div>
+  <div class="pricing-grid">
+    <div class="pc sr">
+      <div class="pc-plan">Starter</div>
+      <div class="pc-price"><sup>$</sup>299</div>
+      <div class="pc-cycle">one-time setup</div>
+      <ul class="pc-feats">
+        <li><span class="ck">✓</span>1 Campaign Setup</li>
+        <li><span class="ck">✓</span>2 Ad Sets + 4 Creatives</li>
+        <li><span class="ck">✓</span>Audience Research</li>
+        <li><span class="ck">✓</span>Pixel Installation</li>
+        <li class="no"><span class="ck">✗</span>Retargeting Strategy</li>
+        <li class="no"><span class="ck">✗</span>Monthly Optimization</li>
+      </ul>
+      <a href="https://wa.me/923001234567?text=Hi! Starter plan inquiry." class="pc-wa outline" target="_blank">Get Started →</a>
+    </div>
+    <div class="pc featured sr">
+      <div class="pc-pop">Most Popular</div>
+      <div class="pc-plan">Growth</div>
+      <div class="pc-price"><sup>$</sup>599</div>
+      <div class="pc-cycle">per month</div>
+      <ul class="pc-feats">
+        <li><span class="ck">✓</span>3 Campaigns + 6 Ad Sets</li>
+        <li><span class="ck">✓</span>12 Ad Creatives</li>
+        <li><span class="ck">✓</span>Advanced Targeting</li>
+        <li><span class="ck">✓</span>Retargeting Strategy</li>
+        <li><span class="ck">✓</span>Monthly Optimization</li>
+        <li><span class="ck">✓</span>Weekly Reports</li>
+      </ul>
+      <a href="https://wa.me/923001234567?text=Hi! Growth plan inquiry." class="pc-wa" target="_blank">Chat on WhatsApp →</a>
+    </div>
+    <div class="pc sr">
+      <div class="pc-plan">Scale</div>
+      <div class="pc-price"><sup>$</sup>999</div>
+      <div class="pc-cycle">per month</div>
+      <ul class="pc-feats">
+        <li><span class="ck">✓</span>Unlimited Campaigns</li>
+        <li><span class="ck">✓</span>Full Funnel Strategy</li>
+        <li><span class="ck">✓</span>Unlimited Creatives</li>
+        <li><span class="ck">✓</span>Advanced Retargeting</li>
+        <li><span class="ck">✓</span>Daily Optimization</li>
+        <li><span class="ck">✓</span>Dedicated Manager</li>
+      </ul>
+      <a href="https://wa.me/923001234567?text=Hi! Scale plan inquiry." class="pc-wa outline" target="_blank">Let's Scale →</a>
+    </div>
+  </div>
+</section> -->
+
+<!-- CONTACT — NO FORM, SOCIAL ONLY -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-left sr-left">
+      <div class="sec-tag">Get In Touch</div>
+      <h2>Ready to <em>Scale</em><br>Your Brand?</h2>
+      <p>Don't fill out a form — just reach out directly. I respond within 2 hours and love a quick chat to understand your goals before we start.</p>
+      <div class="contact-cards">
+        <a href="https://wa.me/923350198494" class="cc cc-wa" target="_blank">
+          <div class="cc-icon i-wa"><svg width="22" height="22" viewBox="0 0 32 32" fill="#25D366"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.67 4.61 1.832 6.5L4 29l7.78-1.805A11.94 11.94 0 0016 27c6.627 0 12-5.373 12-12S22.627 3 16 3zm6.2 16.8c-.26.73-1.52 1.38-2.1 1.44-.54.06-1.04.26-3.5-.73-2.96-1.18-4.86-4.18-5.01-4.37-.14-.2-1.16-1.54-1.16-2.93 0-1.4.73-2.09 1-2.37.26-.27.57-.34.77-.34.19 0 .38.01.54.01.17 0 .4-.07.63.48.23.56.78 1.92.85 2.06.07.14.12.3.02.48-.1.18-.15.3-.3.46-.14.16-.3.36-.43.48-.14.14-.29.29-.12.57.17.28.74 1.22 1.59 1.97 1.09.97 2.01 1.27 2.3 1.41.28.14.45.12.62-.07.17-.2.72-.84.91-1.12.19-.28.38-.23.64-.14.26.09 1.65.78 1.93.92.28.14.47.21.54.33.07.12.07.69-.19 1.39z"/></svg></div>
+          <div><div class="cc-label">WhatsApp</div><div class="cc-val">+92 300 123 4567</div></div>
+          <span class="cc-arrow">→</span>
+        </a>
+        <a href="adnan.codepro@gmail.com" class="cc cc-em">
+          <div class="cc-icon i-em"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F5C842" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="cc-label">Email</div><div class="cc-val">adnan.codepro@gmail.com</div></div>
+          <span class="cc-arrow">→</span>
+        </a>
+        <a href="https://www.instagram.com/muhammad442169" class="cc cc-ig" target="_blank">
+          <div class="cc-icon i-ig"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E1306C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+          <div><div class="cc-label">Instagram</div><div class="cc-val">@Adnanads</div></div>
+          <span class="cc-arrow">→</span>
+        </a>
+        <a href="https://web.facebook.com/profile.php?id=61588491668048" class="cc cc-fb" target="_blank">
+          <div class="cc-icon i-fb"><svg width="22" height="22" viewBox="0 0 24 24" fill="#1877F2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></div>
+          <div><div class="cc-label">Facebook Page</div><div class="cc-val">facebook.com/Adnan ads</div></div>
+          <span class="cc-arrow">→</span>
+        </a>
+      </div>
+    </div>
+    <div class="sr-right">
+      <div class="avail-card">
+        <div class="avail-dot"></div>
+        <h3>Currently Available</h3>
+        <p>Taking on new clients for Facebook Ads management. Limited spots — reach out before they fill up!</p>
+        <div class="avail-stat">
+          <div><div class="av-n">3</div><div class="av-l">Spots Left</div></div>
+          <div><div class="av-n" style="color:var(--blue)">&lt;2h</div><div class="av-l">Response</div></div>
+          <div><div class="av-n" style="color:var(--gold)">Free</div><div class="av-l">Strategy Call</div></div>
+        </div>
+        <a href="https://wa.me/923350198494?text=Hi Adnan! I'd like to discuss Facebook Ads for my business." class="avail-wa" target="_blank">
+          <svg width="17" height="17" viewBox="0 0 32 32" fill="white"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.67 4.61 1.832 6.5L4 29l7.78-1.805A11.94 11.94 0 0016 27c6.627 0 12-5.373 12-12S22.627 3 16 3z"/></svg>
+          Message Me on WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="foot-logo">
+    <div class="foot-logo-icon"><img src="portfolio-logo.jpeg" width="50px" height="50px" alt=""></div>
+    <div class="foot-logo-text">adnan<span>Ads</span></div>
+  </a>
+  <div class="foot-center">
+    <div>© 2026 Growth Sphere Marketing Facebook Ads Specialist</div>
+    <div style="font-size:0.72rem;opacity:.5;margin-top:4px">Helping personal brands grow through proven advertising</div>
+  </div>
+  <div class="foot-social">
+    <a href="https://wa.me/923350198494" class="f-s" target="_blank"><svg width="15" height="15" viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.67 4.61 1.832 6.5L4 29l7.78-1.805A11.94 11.94 0 0016 27c6.627 0 12-5.373 12-12S22.627 3 16 3z"/></svg></a>
+    <a href="https://web.facebook.com/profile.php?id=61588491668048" class="f-s" target="_blank"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+    <a href="https://www.instagram.com/muhammad442169" class="f-s" target="_blank"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+    <a href="adnan.codepro@gmail.com" class="f-s"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+  </div>
+</footer>
+
+<!-- FLOATING WA -->
+<a href="https://wa.me/923350198494" class="float-wa" target="_blank">
+  <div class="float-wa-ring"></div>
+  <svg width="25" height="25" viewBox="0 0 32 32" fill="white"><path d="M16 3C9.373 3 4 8.373 4 15c0 2.385.67 4.61 1.832 6.5L4 29l7.78-1.805A11.94 11.94 0 0016 27c6.627 0 12-5.373 12-12S22.627 3 16 3zm6.2 16.8c-.26.73-1.52 1.38-2.1 1.44-.54.06-1.04.26-3.5-.73-2.96-1.18-4.86-4.18-5.01-4.37-.14-.2-1.16-1.54-1.16-2.93 0-1.4.73-2.09 1-2.37.26-.27.57-.34.77-.34.19 0 .38.01.54.01.17 0 .4-.07.63.48.23.56.78 1.92.85 2.06.07.14.12.3.02.48-.1.18-.15.3-.3.46-.14.16-.3.36-.43.48-.14.14-.29.29-.12.57.17.28.74 1.22 1.59 1.97 1.09.97 2.01 1.27 2.3 1.41.28.14.45.12.62-.07.17-.2.72-.84.91-1.12.19-.28.38-.23.64-.14.26.09 1.65.78 1.93.92.28.14.47.21.54.33.07.12.07.69-.19 1.39z"/></svg>
+</a>
+
+<script>
+// Custom Cursor
+const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';requestAnimationFrame(loop)})();
+document.querySelectorAll('a,button,.srv-item,.port-card,.tc,.proc').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='5px';cur.style.height='5px';curR.style.width='50px';curR.style.height='50px'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='10px';cur.style.height='10px';curR.style.width='38px';curR.style.height='38px'});
+});
+
+// Scroll Reveal
+const obs=new IntersectionObserver(es=>{es.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*65)})},{threshold:.1});
+document.querySelectorAll('.sr,.sr-left,.sr-right').forEach(el=>obs.observe(el));
+
+// Counter
+const cObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const el=e.target,t=+el.dataset.count;let n=0;const s=Math.ceil(t/50),tm=setInterval(()=>{n=Math.min(n+s,t);el.textContent=n;if(n>=t)clearInterval(tm)},28);cObs.unobserve(el)}})},{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(c=>cObs.observe(c));
+
+// Nav active
+const secs=document.querySelectorAll('section[id]'),navAs=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(window.scrollY>=s.offsetTop-90)c=s.id});navAs.forEach(a=>{const act=a.getAttribute('href')==='#'+c;a.style.color=act?'var(--white)':'';a.style.fontWeight=act?'700':''});});
+</script>
+</body>
+</html>
